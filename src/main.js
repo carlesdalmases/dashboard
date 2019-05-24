@@ -1,6 +1,9 @@
 import Vue from 'vue'
 import './plugins/axios'
 import App from './App.vue'
+import Buefy from 'buefy'
+
+Vue.use(Buefy)
 
 Vue.config.productionTip = false
 
