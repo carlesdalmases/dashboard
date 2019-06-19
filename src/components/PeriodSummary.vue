@@ -1,18 +1,72 @@
 <template>
-  <div>
-    <section>
-      {{ consumeByRates }}
-    </section>
-  </div>
+  <section>
+    <b-table
+      :data="consumeByRates"
+      :striped="true"
+    >
+      <template slot-scope="props">
+        <b-table-column field="rate" label="Tarifa" width="40">
+          {{ props.row.rate }}
+        </b-table-column>
+
+        <b-table-column field="p1" label="P1 - Pic" numeric>
+          {{ props.row.p1 | ifExist | truncate_kwh }}
+          <b-tag type="is-danger">
+            {{ props.row.p1 | ifExist | perCent(consumeByRates) }}
+          </b-tag>
+        </b-table-column>
+
+        <b-table-column field="p2" label="P2 - Vall" numeric>
+          {{ props.row.p2 | ifExist | truncate_kwh }}
+          <b-tag v-if="props.row.p2" type="is-warning">
+            {{ props.row.p2 | ifExist | perCent(consumeByRates) }}
+          </b-tag>
+        </b-table-column>
+
+        <b-table-column field="p3" label="P3 - SuperVall" numeric>
+          {{ props.row.p3 | ifExist | truncate_kwh  }}
+          <b-tag v-if="props.row.p3" type="is-success">
+            {{ props.row.p3 | ifExist | perCent(consumeByRates)}}
+          </b-tag>
+        </b-table-column>
+      </template>
+    </b-table>
+  </section>
 </template>
 
 <script>
 
-import { remove, includes, groupBy, forEach } from 'lodash';
+import { remove, includes, groupBy, forEach, find} from 'lodash';
 import { parse } from 'date-fns';
 
 export default {
   name: 'PeriodSummary',
+  filters: {
+    truncate_kwh: function (value) {
+      if (value) {
+        return Math.trunc(value);
+      }
+      else {
+        return;
+      }
+    },
+    ifExist: function (value) {
+      if(value) {
+        return value;
+      }
+      else {
+        return null;
+      }
+    },
+    perCent: function (value, arg1) {
+      if(value) {
+        return Math.round(((value)/((find(arg1, { 'rate': '20A' })).p1))*100) + '%';
+      }
+      else {
+        return;
+      }
+    }
+  },
   props: {
     dataSelection: {
       type: Array,
@@ -23,7 +77,33 @@ export default {
   },
   data: function(){
     return {
-      consumeByRates: []
+      consumeByRates: [],
+      columns: [
+        {
+          field: 'rate',
+          label: 'Tarifes',
+          width: '40',
+          numeric: false
+        },
+        {
+          field: 'p1',
+          label: 'P1 - Pic',
+          width: '40',
+          numeric: true
+        },
+        {
+          field: 'p2',
+          label: 'P2 - Vall',
+          width: '40',
+          numeric: true
+        },
+        {
+          field: 'p3',
+          label: 'P3 - SuperVall',
+          width: '40',
+          numeric: true
+        }
+      ]
       }
   },
   watch: {
@@ -118,7 +198,7 @@ export default {
       x.push(obj20DHS);
       return x;
     }
-  }
+  } //methods
 }
 
 </script>

@@ -1,27 +1,25 @@
 <template>
-  <div>
-    <PeriodSelector
-      :d-abs-initial="dAbsInitial"
-      :d-abs-ends="dAbsEnds"
-      @dateUpdated="dateRecived"
-    />
-    <section v-if="errored">
-      <p>We're sorry, we're not able to retrieve this information at the moment, please try back later</p>
-    </section>
-    <section v-else>
-      <div v-if="loading">
-        Loading...
+  <section class="section">
+    <div class="columns">
+      <div class="column is-one-third">
+        <PeriodSelector
+          :d-abs-initial="dAbsInitial"
+          :d-abs-ends="dAbsEnds"
+          @dateUpdated="dateRecived"
+        />
       </div>
-      <div v-else>
-        <!-- <p>Dades HTTP {{ dAbsInitial }} {{ dAbsEnds }}</p> -->
-        <!-- <b-table
-          :data="dates_selection"
-          :columns="columns"
-        /> -->
-        <PeriodSummary :data-selection="dates_selection" />
+      <div class="column">
+        <section v-if="errored">
+          <p>We're sorry, we're not able to retrieve this information at the moment, please try back later</p>
+        </section>
+        <section v-else>
+          <div>
+            <PeriodSummary :data-selection="dates_selection" />
+          </div>
+        </section>
       </div>
-    </section>
-  </div>
+    </div> <!-- Columns -->
+  </section>
 </template>
 
 <script>

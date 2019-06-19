@@ -1,42 +1,44 @@
 <template>
-  <div>
-    <b-field label="Selecciona data inicial">
-      <b-datepicker
-        v-model="dateInitial"
-        placeholder="Inici"
-        icon="calendar-today"
-        icon-pack="mdi"
-        :first-day-of-week="firstdayofweek"
-        :day-names="daynames"
-        :month-names="monthnames"
-        :min-date="dAbsInitial"
-        :max-date="dAbsEnds"
-        :focused-date="dAbsEnds"
-        @input="checkperiode"
-      />
-    </b-field>
-
-    <b-field label="Selecciona data final">
-      <b-datepicker
-        v-model="dateEnds"
-        placeholder="Final"
-        icon="calendar-today"
-        icon-pack="mdi"
-        :first-day-of-week="firstdayofweek"
-        :day-names="daynames"
-        :month-names="monthnames"
-        :min-date="dateInitial"
-        :max-date="dAbsEnds"
-        :focused-date="dateInitial"
-      />
-    </b-field>
-
-    <section>
+  <section class="section text_left">
+    <section class="container container_margins">
+      <b-field label="Data inicial">
+        <b-datepicker
+          v-model="dateInitial"
+          placeholder="Inici"
+          icon="calendar-today"
+          icon-pack="mdi"
+          :first-day-of-week="firstdayofweek"
+          :day-names="daynames"
+          :month-names="monthnames"
+          :min-date="dAbsInitial"
+          :max-date="dAbsEnds"
+          :focused-date="dAbsEnds"
+          @input="checkperiode"
+        />
+      </b-field>
+    </section>
+    <section class="container container_margins">
+      <b-field label="Data final">
+        <b-datepicker
+          v-model="dateEnds"
+          placeholder="Final"
+          icon="calendar-today"
+          icon-pack="mdi"
+          :first-day-of-week="firstdayofweek"
+          :day-names="daynames"
+          :month-names="monthnames"
+          :min-date="dateInitial"
+          :max-date="dAbsEnds"
+          :focused-date="dateInitial"
+        />
+      </b-field>
+    </section>
+    <section class="container container_margins text_right">
       <b-button @click="sendDateToParent">
         Seleccionar
       </b-button>
     </section>
-  </div>
+  </section>
 </template>
 
 <script>
@@ -91,4 +93,15 @@ export default {
 
 </script>
 
-<style />
+<style scoped>
+.text_left {
+  text-align: left;
+}
+.text_right {
+  text-align: right;
+}
+.container_margins {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+</style>
