@@ -1,20 +1,21 @@
 <template>
   <div id="app">
-    <img
-      alt="Vue logo"
-      src="./assets/logo.png"
+    <link
+      rel="stylesheet"
+      href="https://cdn.materialdesignicons.com/2.5.94/css/materialdesignicons.min.css"
     >
-    <HelloWorld msg="Welcome to Your Vue.js App" />
+    <endesa />
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+
+import endesa from './components/pages/endesa'
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    endesa
   }
 }
 </script>
