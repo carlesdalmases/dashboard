@@ -14,7 +14,7 @@
         </section>
         <section v-else>
           <div>
-            <PeriodSummary :data-selection="dates_selection" />
+            <PeriodSummaryKwh :data-selection="dates_selection" />
           </div>
         </section>
       </div>
@@ -25,34 +25,19 @@
 <script>
 
 import PeriodSelector from '../PeriodSelector'
-import PeriodSummary from '../PeriodSummary'
+import PeriodSummaryKwh from '../PeriodSummaryKwh'
 import axios from 'axios';
 import {format, parse} from 'date-fns';
-// import {keys} from 'lodash';
 
 export default {
   name: 'EndesaConsumePeriode',
   components: {
     PeriodSelector,
-    PeriodSummary
+    PeriodSummaryKwh
     },
   data: function() {
     return {
       dates_selection: [],
-      columns: [
-        {
-          field: 'date',
-          label: 'Data'
-      },
-      {
-        field: 'h',
-        label: 'Hora'
-      },
-      {
-        field: 'v',
-        label: 'kw/h'
-      }
-      ],
       loading: true,
       errored: false,
       msg_error: null,

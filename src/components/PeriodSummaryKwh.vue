@@ -1,17 +1,23 @@
 <template>
   <section>
+    <h1 class="title is-4">Consum per tarifes, kWh</h1>
     <b-table
       :data="consumeByRates"
       :striped="true"
+      detailed
+      detail-key="rate"
+      show-detail-icon
     >
       <template slot-scope="props">
         <b-table-column field="rate" label="Tarifa" width="40">
-          {{ props.row.rate }}
+          <a @click="toggle(props.row)">
+            {{ props.row.rate }}
+          </a>
         </b-table-column>
 
         <b-table-column field="p1" label="P1 - Pic" numeric>
           {{ props.row.p1 | ifExist | truncate_kwh }}
-          <b-tag type="is-danger">
+          <b-tag v-if="props.row.p1" type="is-danger">
             {{ props.row.p1 | ifExist | perCent(consumeByRates) }}
           </b-tag>
         </b-table-column>
@@ -29,6 +35,28 @@
             {{ props.row.p3 | ifExist | perCent(consumeByRates)}}
           </b-tag>
         </b-table-column>
+
+        <b-table-column field="ce" label="Cotxe elèctric" numeric>
+          {{ props.row.ce | ifExist | truncate_kwh  }}
+          <b-tag v-if="props.row.ce" type="is-success">
+            {{ props.row.ce | ifExist | perCent(consumeByRates)}}
+          </b-tag>
+
+        </b-table-column>
+
+      </template>
+      <template slot="detail" slot-scope="props">
+        <article class="media">
+          <div class="media-content">
+            <div class="content">
+              <p>
+                <strong>{{ props.row.rate }}</strong>
+                <br>
+                {{ props.row.detail }}
+              </p>
+            </div>
+          </div>
+        </article>
       </template>
     </b-table>
   </section>
@@ -40,7 +68,7 @@ import { remove, includes, groupBy, forEach, find} from 'lodash';
 import { parse } from 'date-fns';
 
 export default {
-  name: 'PeriodSummary',
+  name: 'PeriodSummaryKwh',
   filters: {
     truncate_kwh: function (value) {
       if (value) {
@@ -77,33 +105,7 @@ export default {
   },
   data: function(){
     return {
-      consumeByRates: [],
-      columns: [
-        {
-          field: 'rate',
-          label: 'Tarifes',
-          width: '40',
-          numeric: false
-        },
-        {
-          field: 'p1',
-          label: 'P1 - Pic',
-          width: '40',
-          numeric: true
-        },
-        {
-          field: 'p2',
-          label: 'P2 - Vall',
-          width: '40',
-          numeric: true
-        },
-        {
-          field: 'p3',
-          label: 'P3 - SuperVall',
-          width: '40',
-          numeric: true
-        }
-      ]
+      consumeByRates: []
       }
   },
   watch: {
@@ -128,24 +130,36 @@ export default {
       const p220DHS = [1,8,9,10,11,12,13,24];
       // const p320DHS = [2,3,4,5,6,7];
 
+      const ce = [1,2,3,4,5,6,7];
+
       //Objectes
       // Tarifa sense discriminació horària
       let obj20A = {
         rate:"20A",
-        p1:0
+        p1:0,
+        detail: "Sense discriminació horària"
       };
       // Tarifa amb discriminació horària (P1-Pic i P2-Vall), amb horari d'estiu i d'hivern
       let obj20DHA = {
         rate:"20DHA",
         p1:0,
-        p2:0
+        p2:0,
+        detail: "Amb discriminació horària. En horari d'hivern, P1: de les 12h a les 22h, P2: de les 22h a les 12h. En horari d'estiu, P1: de les 13h a les 23h, P2: de les 23h a les 13h."
       };
       //Tarifa cotxe elèctric amb discriminació horària (P1-Pic, P2-Vall, P3-Supervall)
       let obj20DHS = {
         rate:"20DHS",
         p1:0,
         p2:0,
-        p3:0
+        p3:0,
+        detail: "Amb discriminació horària. P1: de les 13h a les 23h, P2: de les 23h a la 1h i de les 7h a les 13h. P3: de les 1h a les 7h."
+      };
+
+      //Consum del cotxe elèctric, en kWh, entre les 00:00 i les 07:00h
+      let objCE = {
+        rate:"CE",
+        ce:0,
+        detail: "Consum entre les 00:00h i les 07:00h, típicament quan es carrega el cotxe elèctric."
       };
 
       //groupBy day
@@ -156,6 +170,10 @@ export default {
           forEach(v, function(x){
 
             obj20A.p1 += x.v;
+
+            if(includes(ce, x.h)){
+              objCE.ce += x.v;
+            }
 
             if(includes(p1Winter20DHA, x.h)){
               obj20DHA.p1 += x.v;
@@ -177,6 +195,10 @@ export default {
 
             obj20A.p1 += x.v;
 
+            if(includes(ce, x.h)){
+              objCE.ce += x.v;
+            }
+
             if(includes(p1Summer20DHA, x.h)){
               obj20DHA.p1 += x.v;
             } else {
@@ -196,7 +218,11 @@ export default {
       x.push(obj20A);
       x.push(obj20DHA);
       x.push(obj20DHS);
+      x.push(objCE);
       return x;
+    },
+    toggle(row) {
+      this.$refs.table.toggleDetails(row)
     }
   } //methods
 }
