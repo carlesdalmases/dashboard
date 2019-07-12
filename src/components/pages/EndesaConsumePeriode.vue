@@ -16,6 +16,9 @@
           <div>
             <PeriodSummaryKwh :data-selection="dates_selection" />
           </div>
+          <div>
+            <PeriodGraphHourlyLine :data-model="dates_selection" />
+          </div>
         </section>
       </div>
     </div> <!-- Columns -->
@@ -26,6 +29,7 @@
 
 import PeriodSelector from '../PeriodSelector'
 import PeriodSummaryKwh from '../PeriodSummaryKwh'
+import PeriodGraphHourlyLine from '../graphs/endesa/PeriodGraphHourlyLine'
 import axios from 'axios';
 import {format, parse} from 'date-fns';
 
@@ -33,7 +37,8 @@ export default {
   name: 'EndesaConsumePeriode',
   components: {
     PeriodSelector,
-    PeriodSummaryKwh
+    PeriodSummaryKwh,
+    PeriodGraphHourlyLine,
     },
   data: function() {
     return {
