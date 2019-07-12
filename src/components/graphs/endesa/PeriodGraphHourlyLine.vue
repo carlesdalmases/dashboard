@@ -48,33 +48,14 @@ export default {
   },
   computed: {
     chartData: function(){
-
-      // eslint-disable-next-line no-console
-      console.log('Inici chartData function');
-
-
-      // var z=[];
-      //
-      // z.cols = [
-      //   {id:0 , label:'Data', type: 'datetime'},
-      //   {id:1, label:'kWh', type: 'number'}
-      // ];
-      // z.rows = map(this.dataModel, function(x){
-      //   return [setHours(parse(x.date), x.h), x.v];
-      // });
-
       var z = [];
       z.push(['Data', 'kWh']);
       map(this.dataModel, function(x){
         z.push([setHours(parse(x.date), x.h), x.v]);
         return;
       });
-      // eslint-disable-next-line no-console
-      console.log(z);
-
       return z;
     }
-
   }, //Fi de computed
   watch: {
   },

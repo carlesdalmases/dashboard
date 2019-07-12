@@ -16,12 +16,12 @@
           <div>
             <PeriodSummaryKwh :data-selection="dates_selection" />
           </div>
-          <div>
-            <PeriodGraphHourlyLine :data-model="dates_selection" />
-          </div>
         </section>
       </div>
     </div> <!-- Columns -->
+    <div>
+      <PeriodGraphHourlyLine :data-model="dates_selection" />
+    </div>
   </section>
 </template>
 

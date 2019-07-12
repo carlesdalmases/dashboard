@@ -59,16 +59,41 @@
         </article>
       </template>
     </b-table>
+    <!--  Rate: 20DHS -->
+    <div class="columns">
+      <div class="column">
+        <PeriodGraphRatesPie
+          graph-title="20A"
+          :data-model="consumeByRates"
+        />
+      </div>
+      <div class="column">
+        <PeriodGraphRatesPie
+          graph-title="20DHA"
+          :data-model="consumeByRates"
+        />
+      </div>
+      <div class="column">
+        <PeriodGraphRatesPie
+          graph-title="20DHS"
+          :data-model="consumeByRates"
+        />
+      </div>
+    </div>
   </section>
 </template>
 
 <script>
 
+import PeriodGraphRatesPie from './graphs/endesa/PeriodGraphRatesPie.vue';
 import { remove, includes, groupBy, forEach, find} from 'lodash';
 import { parse } from 'date-fns';
 
 export default {
   name: 'PeriodSummaryKwh',
+  components: {
+    PeriodGraphRatesPie
+  },
   filters: {
     truncate_kwh: function (value) {
       if (value) {
